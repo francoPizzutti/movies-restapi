@@ -1,0 +1,5 @@
+gesdinet_jwt_refresh_token:
+    refresh_token_class: App\Entity\RefreshToken
+    ttl: 3600
+    ttl_update: false # set to true if you want to update ttl after each token usage
+    single_use: true

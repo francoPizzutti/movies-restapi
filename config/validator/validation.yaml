@@ -1,0 +1,63 @@
+App\Form\Model\MovieDto:
+    properties:
+        name:
+            - NotBlank:
+                message: 'name property should not be blank.'
+                allowNull: false
+            - Length: 
+                min: 3
+                max: 255
+                minMessage: 'Name property must be at least {{ limit }} characters long'
+                maxMessage: 'Name property must not exceed {{ limit }} characters'
+        genre:
+            - NotBlank:
+                message: 'genre property should not be blank.'
+                allowNull: false
+            - Length: 
+                min: 3
+                max: 255
+                minMessage: 'Genre property must be at least {{ limit }} characters long'
+                maxMessage: 'Genre property must not exceed {{ limit }} characters'
+        duration:
+            - NotNull: ~
+            - GreaterThan:
+                value: 15
+                message: 'Duration should be at least {{ compared_value }} minutes.'
+            - NotBlank:
+                message: 'duration property should not be blank.'
+            - Positive: 
+                message: 'duration property should be a positive integer (expressed in minutes).'
+        directorId:
+            - NotNull: ~
+        actorIds:
+            - Type: array
+
+App\Form\Model\DirectorDto:
+    properties:
+        fullName:
+            - NotBlank:
+                message: 'fullName property should not be blank.'
+                allowNull: false
+            - Length: 
+                min: 3
+                max: 255
+                minMessage: 'fullName property must be at least {{ limit }} characters long'
+                maxMessage: 'fullName property must not exceed {{ limit }} characters'
+        birthDate:
+            - NotBlank:
+                message: 'birthDate property should not be blank.'
+                allowNull: false
+            - Length: 
+                min: 3
+                max: 255
+                minMessage: 'birthDate property must be at least {{ limit }} characters long'
+                maxMessage: 'birthDate property must not exceed {{ limit }} characters'
+        instagramProfile:
+            - NotBlank:
+                message: 'instagramProfile property should not be blank.'
+                allowNull: false
+            - Length: 
+                min: 3
+                max: 255
+                minMessage: 'instagramProfile property must be at least {{ limit }} characters long'
+                maxMessage: 'instagramProfile property must not exceed {{ limit }} characters'

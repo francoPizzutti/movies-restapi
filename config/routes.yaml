@@ -1,3 +1,113 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+
+login:
+  path: /moviesrest/login
+
+refreshToken:
+  path: /moviesrest/token/refresh
+
+addMovie:
+  path:       /moviesrest/movies
+  controller: App\Controller\MoviesController::addMovie
+  methods:    POST
+
+listMovies:
+  path:       /moviesrest/movies/{movieId?}
+  controller: App\Controller\MoviesController::listMovies
+  methods:    GET
+  requirements:
+    movieId: '\d*'
+
+updateMovie:
+  path:       /moviesrest/movies/{movieId?}
+  controller: App\Controller\MoviesController::updateMovie
+  methods:    PUT
+  requirements:
+    movieId: '\d*'
+
+deleteMovie:
+  path:       /moviesrest/movies/{movieId?}
+  controller: App\Controller\MoviesController::deleteMovie
+  methods:    DELETE
+  requirements:
+    movieId: '\d*'
+
+addActor:
+  path:       /moviesrest/actors
+  controller: App\Controller\ActorController::addActor
+  methods:    POST
+
+listActors:
+  path:       /moviesrest/actors/{actorId?}
+  controller: App\Controller\ActorController::listActors
+  methods:    GET
+  requirements:
+    actorId: '\d*'
+
+updateActor:
+  path:       /moviesrest/actors/{actorId?}
+  controller: App\Controller\ActorController::updateActor
+  methods:    PUT
+  requirements:
+    actorId: '\d*'
+
+deleteActor:
+  path:       /moviesrest/actors/{actorId?}
+  controller: App\Controller\ActorController::deleteActor
+  methods:    DELETE
+  requirements:
+    actorId: '\d*'
+
+addDirector:
+  path:       /moviesrest/directors
+  controller: App\Controller\DirectorController::addDirector
+  methods:    POST
+
+listDirectors:
+  path:       /moviesrest/directors/{directorId?}
+  controller: App\Controller\DirectorController::listDirectors
+  methods:    GET
+  requirements:
+    directorId: '\d*'
+
+updateDirector:
+  path:       /moviesrest/directors/{directorId?}
+  controller: App\Controller\DirectorController::updateDirector
+  methods:    PUT
+  requirements:
+    directorId: '\d*'
+
+deleteDirector:
+  path:       /moviesrest/directors/{directorId?}
+  controller: App\Controller\DirectorController::deleteDirector
+  methods:    DELETE
+  requirements:
+    directorId: '\d*'
+
+addTVShows: 
+  path: /moviesrest/tvshows
+  controller: App\Controller\TVShowsController::addTvShow
+  methods:    POST
+
+listTVShows:
+  path:       /moviesrest/directors/{tvShowId?}
+  controller: App\Controller\TVShowsController::listTvShows
+  methods:    GET
+  requirements:
+    directorId: '\d*'
+  
+updateTvShow:
+  path:       /moviesrest/directors/{tvShowId?}
+  controller: App\Controller\TVShowsController::updateTvShow
+  methods:    PUT
+  requirements:
+    directorId: '\d*'
+  
+deleteTvShow:
+  path:       /moviesrest/directors/{tvShowId?}
+  controller: App\Controller\TVShowsController::deleteTvShow
+  methods:    DELETE
+  requirements:
+    directorId: '\d*'
