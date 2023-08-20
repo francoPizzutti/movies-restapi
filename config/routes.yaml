@@ -92,22 +92,22 @@ addTVShows:
   methods:    POST
 
 listTVShows:
-  path:       /moviesrest/directors/{tvShowId?}
+  path:       /moviesrest/tvshows/{tvShowId?}
   controller: App\Controller\TVShowsController::listTvShows
   methods:    GET
   requirements:
-    directorId: '\d*'
+    tvShowId: '\d*'
   
 updateTvShow:
-  path:       /moviesrest/directors/{tvShowId?}
+  path:       /moviesrest/tvshows/{tvShowId?}
   controller: App\Controller\TVShowsController::updateTvShow
   methods:    PUT
   requirements:
-    directorId: '\d*'
+    tvShowId: '\d*'
   
 deleteTvShow:
-  path:       /moviesrest/directors/{tvShowId?}
+  path:       /moviesrest/tvshows/{tvShowId?}
   controller: App\Controller\TVShowsController::deleteTvShow
   methods:    DELETE
   requirements:
-    directorId: '\d*'
+    tvShowId: '\d*'

@@ -35,7 +35,7 @@ class TVShow
     private $genre;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     private $rating;
 
@@ -96,12 +96,12 @@ class TVShow
         return $this;
     }
 
-    public function getRating(): ?int
+    public function getRating(): ?float
     {
         return $this->rating;
     }
 
-    public function setRating(?int $rating): self
+    public function setRating(?float $rating): self
     {
         $this->rating = $rating;
 
@@ -171,11 +171,13 @@ class TVShow
             'id' => $this->getId(),
             'name' => $this->getTitle(),
             'genre' => $this->getGenre(),
+            'rating' => $this->getRating() ?? 0,
             'seasons' => [],
             'actors' => [],
         ];
 
         foreach($this->getSeasons() as $season) {
+            
             $toArray['seasons'][] = $season->toArray();
         }
 
