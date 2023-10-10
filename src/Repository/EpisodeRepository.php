@@ -39,6 +39,15 @@ class EpisodeRepository extends ServiceEntityRepository
         }
     }
 
+    public function findBySeasonId(string $seasonId, int $episodeNumber): Episode
+    {
+        $results = $this->findBySeason($seasonId);
+        $filtered = array_filter($results, function ($episode) use ($episodeNumber) {
+            return $episode->getEpisodeNumber() == $episodeNumber;
+        });
+        return reset($filtered);
+    }
+
 //    /**
 //     * @return Episode[] Returns an array of Episode objects
 //     */

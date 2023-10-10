@@ -39,6 +39,20 @@ class SeasonRepository extends ServiceEntityRepository
         }
     }
 
+    public function findByTvShow(string $tvShowId, int $seasonNumber)
+    {
+        $queryBuilder = $this->createQueryBuilder('s');
+        $queryBuilder->join('s.tvShow', 't')
+        ->where('t.id = :tvShowId')
+        ->setParameter('tvShowId', $tvShowId);
+
+        $queryBuilder
+            ->andWhere('s.seasonNumber = :seasonNumber')
+            ->setParameter('seasonNumber', $seasonNumber);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
 //    /**
 //     * @return Season[] Returns an array of Season objects
 //     */

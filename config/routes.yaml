@@ -100,7 +100,7 @@ listTVShows:
   
 updateTvShow:
   path:       /moviesrest/tvshows/{tvShowId?}
-  controller: App\Controller\TVShowsController::updateTvShow
+  controller: App\Controller\TVShowsController::editTvShow
   methods:    PUT
   requirements:
     tvShowId: '\d*'

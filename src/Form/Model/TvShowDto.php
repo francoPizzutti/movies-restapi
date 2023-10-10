@@ -6,12 +6,12 @@ class TvShowDto {
     /**
      * @var int[] $actorIds
      */
-    public array $actorIds;
+    public array $actorIds = [];
 
     /**
      * @var SeasonDto[] $seasons
      */
-    public array $seasons;
+    public array $seasons = [];
 
     public string $title;
     public string $genre;

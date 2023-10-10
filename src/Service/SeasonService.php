@@ -5,8 +5,9 @@ namespace App\Service;
 use App\Entity\Season;
 use App\Entity\TVShow;
 use App\Form\Model\SeasonDto;
-use App\Repository\SeasonRepository;
 use App\Service\EpisodeService;
+use App\Exception\NotFoundException;
+use App\Repository\SeasonRepository;
 
 class SeasonService
 {
@@ -37,5 +38,34 @@ class SeasonService
         }
 
         return $season;
+    }
+    
+    public function updateSeason(string $tvShowId, SeasonDto $seasonData): void
+    {
+        $season = $this->seasonRepository->findByTvShow($tvShowId, $seasonData->seasonNumber);
+        $season->setTitle($seasonData->title);
+        $season->setSummary($seasonData->summary);
+        foreach($seasonData->episodes as $episodeData) {
+            $this->episodeService->updateEpisode($season->getId(), $episodeData);
+        }
+    }
+
+    /**
+     * @throws NotFoundException
+     */
+    public function validateSeasons(string $tvShowId, array $dtoSeasons): void
+    {
+        if(empty($dtoSeasons)) {
+            return;
+        }
+
+        foreach($dtoSeasons as $dtoSeason) {
+            $season = $this->seasonRepository->findByTvShow($tvShowId, $dtoSeason->seasonNumber);
+            if(empty($season)) {
+                throw new NotFoundException('Season');
+            }
+            
+            $this->episodeService->validateEpisodes($season->getId(), $dtoSeason->episodes);
+        }
     }
 }

@@ -10,11 +10,14 @@ use Psr\Log\LoggerInterface;
 use App\Form\Model\TvShowDto;
 use App\Service\TvShowService;
 use App\Form\Type\TvShowFormType;
+use Particle\Validator\Rule\Json;
 use Symfony\Component\Form\Forms;
 use App\Repository\ActorRepository;
+use App\Exception\NotFoundException;
 use App\Repository\TVShowRepository;
 use App\Repository\DirectorRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Exception\FailedCreationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -53,25 +56,20 @@ class TVShowsController extends AbstractController {
 
     public function listTvShows(string $tvShowId): JsonResponse
     {
-        if(!empty($tvShowId)) {
-            $tvShow = $this->tvShowRepository->find($tvShowId);
-            if(empty($tvShow)) {
-                return new JsonResponse([
-                    'error' => 'TV Show not found for specified movieId'
-                ], JsonResponse::HTTP_BAD_REQUEST);
+        try {
+            if(!empty($tvShowId)) {
+                $shows = $this->tvShowService->listShows($tvShowId);
+                return new JsonResponse($shows, JsonResponse::HTTP_OK);
             }
 
-            return new JsonResponse($tvShow->toArray(), JsonResponse::HTTP_OK);
+            $shows = $this->tvShowService->listShows();
+            return new JsonResponse($shows, JsonResponse::HTTP_OK);
+
+        } catch(NotFoundException $e) {
+            return new JsonResponse([
+                'error' => $e->getMessage(),
+            ], JsonResponse::HTTP_BAD_REQUEST);
         }
-
-        $results = $this->tvShowService->getShowsList();
-
-        $data = [
-            'results' => $results,
-            'total' => count($results) //useful when implementing frontend pagination
-        ];
-
-        return new JsonResponse($data, JsonResponse::HTTP_OK);
     }
 
     public function addTvShow(Request $request): JsonResponse
@@ -96,9 +94,40 @@ class TVShowsController extends AbstractController {
             return new JsonResponse(['errors' => $errorArray], JsonResponse::HTTP_BAD_REQUEST);
         }
 
-       $tvShow = $this->tvShowService->createTvShow($tvShowDto);
+        try {
+            $tvShow = $this->tvShowService->createTvShow($tvShowDto);
+        } catch(FailedCreationException $e) {
+            return new JsonResponse(['errors' => $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
+        }
 
-        return new JsonResponse([], 200);
+        return new JsonResponse($tvShow->toArray(), 200);
+    }
+
+    public function editTvShow(Request $request, string $tvShowId): JsonResponse
+    {
+        $tvShowDto = new TvShowDto();
+        // Little tweak to support CSRF
+        $form = Forms::createFormFactoryBuilder()
+            ->addExtension(new HttpFoundationExtension())
+            ->getFormFactory()->create(TvShowFormType::class, $tvShowDto);
+        
+        $jsonDataArray = json_decode($request->getContent(), true);
+        $form->submit($jsonDataArray);
+
+        $errors = $this->validator->validate($tvShowDto);
+
+        if(!($form->isValid() && empty(count($errors->getIterator())))) {
+            $errorArray = [];
+            foreach ($errors->getIterator() as $error) {
+                $errorArray[] = $error->getMessage();
+            }
+            
+            return new JsonResponse(['errors' => $errorArray], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        $tvShow = $this->tvShowService->updateTvShow($tvShowId, $tvShowDto);
+
+        return new JsonResponse($tvShow->toArray(), 200);
     }
 
     public function deleteTvShow(string $tvShowId): JsonResponse

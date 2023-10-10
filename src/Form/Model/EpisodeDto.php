@@ -6,7 +6,7 @@ class EpisodeDto {
     /**
      * @var int[] $invitedActors
      */
-    public array $invitedActors;
+    public array $invitedActors = [];
     public string $title;
     public string $summary;
     public int $episodeNumber;
