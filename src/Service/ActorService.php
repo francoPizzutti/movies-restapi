@@ -18,13 +18,11 @@ class ActorService {
     /**
      * @throws FailedCreationException
      */
-    public function validateActors(array $dtoActorIds): void
+    public function validateActors(array $dtoActorIds, array $actors): void
     {
         if(empty($dtoActorIds)) {
             return;
         }
-
-        $actors = $this->actorRepository->findByIdCollection($dtoActorIds);
         
         $existingActorIds = array_map(function ($actor) {
             return $actor->getId();

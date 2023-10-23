@@ -15,15 +15,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Movie
 {    
     /**
-    * @var string[]
-    */
-   public const MANDATORY_MOVIE_FIELDS = [
-       'Name',
-       'Genre',
-       'Duration'
-   ];
-
-    /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")

@@ -43,7 +43,8 @@ class TvShowService
 
     public function createTvShow(TvShowDto $tvShowDto): TVShow
     {
-        $this->actorService->validateActors($tvShowDto->actorIds);
+        $actors = $this->actorRepository->findByIdCollection($tvShowDto->actorIds);
+        $this->actorService->validateActors($tvShowDto->actorIds, $actors);
 
         $tvShow = new TVShow();
         $tvShow->setTitle($tvShowDto->title);
@@ -51,7 +52,6 @@ class TvShowService
         $tvShow->setRating($tvShowDto->rating);
         $tvShow->setReleaseDate(DateTimeImmutable::createFromFormat('Y-m-d', $tvShowDto->releaseDate));
         
-        $actors = $this->actorRepository->findByIdCollection($tvShowDto->actorIds);
         foreach($actors as $actor) {
             $tvShow->addActor($actor);
         }
@@ -82,8 +82,9 @@ class TvShowService
         if(empty($tvShow)) {
             throw new NotFoundException('TvShow'); 
         }
-        
-        $this->actorService->validateActors($tvShowDto->actorIds);
+
+        $actors = $this->actorRepository->findByIdCollection($tvShowDto->actorIds);
+        $this->actorService->validateActors($tvShowDto->actorIds, $actors);
         $this->seasonService->validateSeasons($tvShowId, $tvShowDto->seasons);
 
         $tvShow->setTitle($tvShowDto->title);
@@ -91,7 +92,6 @@ class TvShowService
         $tvShow->setRating($tvShowDto->rating);
         $tvShow->setReleaseDate(DateTimeImmutable::createFromFormat('Y-m-d', $tvShowDto->releaseDate));
         
-        $actors = $this->actorRepository->findByIdCollection($tvShowDto->actorIds);
         foreach($actors as $actor) {
             $tvShow->addActor($actor);
         }

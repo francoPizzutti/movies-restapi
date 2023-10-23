@@ -108,8 +108,9 @@ class EpisodeService
                 throw new NotFoundException('Episode');
             }
 
-            $this->actorService->validateActors($dtoEpisode->invitedActors);
-            $this->directorService->validateDirector($dtoEpisode->directorId);
+            $actors = $this->actorRepository->findByIdCollection($dtoEpisode->invitedActors);
+            $this->actorService->validateActors($dtoEpisode->invitedActors, $actors);
+            $this->directorService->getDirector($dtoEpisode->directorId);
         }
     }
 }

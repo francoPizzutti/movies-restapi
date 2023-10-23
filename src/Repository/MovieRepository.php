@@ -40,6 +40,9 @@ class MovieRepository extends ServiceEntityRepository
         }
     }
     
+    /**
+     * @return mixed[]
+     */
     public function findByCriteria(MovieListCriteria $criteria): array
     {
         $queryBuilder = $this->createQueryBuilder('m')->orderBy('m.' . $criteria->getOrderByField(), $criteria->getSortOrder());
@@ -55,10 +58,15 @@ class MovieRepository extends ServiceEntityRepository
                 ->setParameter('genre', $criteria->getGenreCriteria());
         }
 
+        $countQueryBuilder = clone $queryBuilder;
+        $totals = $countQueryBuilder->select('COUNT(m.id)')->getQuery()->getSingleScalarResult();
+
         $queryBuilder->setMaxResults($criteria->getItemsPerPage());
         $queryBuilder->setFirstResult(($criteria->getPage() -1) * $criteria->getItemsPerPage());
 
-        return $queryBuilder->getQuery()->getResult();
+        $results = $queryBuilder->getQuery()->getResult();
+
+        return [$results, $totals];
     }
 
 //    /**
