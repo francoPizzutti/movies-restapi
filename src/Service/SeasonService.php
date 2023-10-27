@@ -20,6 +20,7 @@ class SeasonService
     ) {
         $this->episodeService = $episodeService;
         $this->seasonRepository = $seasonRepository;
+    
     }
 
     public function createSeason(TVShow $tvShow, SeasonDto $seasonDto): Season
